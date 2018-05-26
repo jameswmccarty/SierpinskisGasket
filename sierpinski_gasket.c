@@ -12,7 +12,7 @@
 int
 random_bit (void)
 {
-  return rand() & 0x01;
+  return rand () & 0x01;
 }
 
 
@@ -49,49 +49,69 @@ gasket_init (gasket * sier)
 
 /* initialize the color palette with user inputs
  * or a default state if no input is provided. */
-void pal_init(palette *pal, char *infile)
+void
+pal_init (palette * pal, char *infile)
 {
-	FILE *palette;
+  FILE *palette;
 
-	if(infile == NULL) {
-		/* a nice light blue default */
-		pal->a_r = 0.39;
-		pal->a_g = 0.55;
-		pal->a_b = 0.5;
+  if (infile == NULL)
+    {
+      /* a nice light blue default */
+      pal->a_r = 0.39;
+      pal->a_g = 0.55;
+      pal->a_b = 0.5;
 
-		pal->b_r = 0.55;
-		pal->b_g = 0.26;
-		pal->b_b = 0.68;
+      pal->b_r = 0.55;
+      pal->b_g = 0.26;
+      pal->b_b = 0.68;
 
-		pal->c_r = 0.5;
-		pal->c_g = 1.5;
-		pal->c_b = 0.0;
+      pal->c_r = 0.5;
+      pal->c_g = 1.5;
+      pal->c_b = 0.0;
 
-		pal->d_r = 0.26;
-		pal->d_g = 0.11;
-		pal->d_b = 0.24;
-	} else {
-	  if ((palette = fopen(infile, "r")) == NULL)
-	  {
-	   printf ("Error reading input file %s.\n", infile);
-	   exit (EXIT_FAILURE);
-	  }
-		printf ("Using provided color palette.\n");
-		/* WARNING -- poor checks for malformed input here. */
-		assert(fscanf (palette, "%lf %lf %lf\n", &(pal->a_r), &(pal->a_g), &(pal->a_b)) != EOF);
-		assert(fscanf (palette, "%lf %lf %lf\n", &(pal->b_r), &(pal->b_g), &(pal->b_b)) != EOF);
-		assert(fscanf (palette, "%lf %lf %lf\n", &(pal->c_r), &(pal->c_g), &(pal->c_b)) != EOF);
-		assert(fscanf (palette, "%lf %lf %lf\n", &(pal->d_r), &(pal->d_g), &(pal->d_b)) != EOF);
-		(void) fclose (palette);
-	} /* end else */
-} /* end pal_init */
+      pal->d_r = 0.26;
+      pal->d_g = 0.11;
+      pal->d_b = 0.24;
+    }
+  else
+    {
+      if ((palette = fopen (infile, "r")) == NULL)
+	{
+	  printf ("Error reading input file %s.\n", infile);
+	  exit (EXIT_FAILURE);
+	}
+      printf ("Using provided color palette.\n");
+      /* WARNING -- poor checks for malformed input here. */
+      assert (fscanf
+	      (palette, "%lf %lf %lf\n", &(pal->a_r), &(pal->a_g),
+	       &(pal->a_b)) != EOF);
+      assert (fscanf
+	      (palette, "%lf %lf %lf\n", &(pal->b_r), &(pal->b_g),
+	       &(pal->b_b)) != EOF);
+      assert (fscanf
+	      (palette, "%lf %lf %lf\n", &(pal->c_r), &(pal->c_g),
+	       &(pal->c_b)) != EOF);
+      assert (fscanf
+	      (palette, "%lf %lf %lf\n", &(pal->d_r), &(pal->d_g),
+	       &(pal->d_b)) != EOF);
+      (void) fclose (palette);
+    }				/* end else */
+}				/* end pal_init */
 
 /* continuous color range based on normalized value t */
-void color_pxl(double t, palette *pal, double *r_out, double *g_out, double *b_out)
+void
+color_pxl (double t, palette * pal, double *r_out, double *g_out,
+	   double *b_out)
 {
-	*r_out = 255. * (pal->a_r + pal->b_r * cos(M_PI * 2. * (pal->c_r * t + pal->d_r)));
-	*g_out = 255. * (pal->a_g + pal->b_g * cos(M_PI * 2. * (pal->c_g * t + pal->d_g)));
-	*b_out = 255. * (pal->a_b + pal->b_b * cos(M_PI * 2. * (pal->c_b * t + pal->d_b)));
+  *r_out =
+    255. * (pal->a_r +
+	    pal->b_r * cos (M_PI * 2. * (pal->c_r * t + pal->d_r)));
+  *g_out =
+    255. * (pal->a_g +
+	    pal->b_g * cos (M_PI * 2. * (pal->c_g * t + pal->d_g)));
+  *b_out =
+    255. * (pal->a_b +
+	    pal->b_b * cos (M_PI * 2. * (pal->c_b * t + pal->d_b)));
 }
 
 /* allocate memory for the image buffer */
@@ -184,7 +204,8 @@ print_usage ()
   printf ("\t-M XMAX [%f]\tgraph x axis maximum\n", (float) XMAX);
   printf ("\t-l YMIN [%f]\tgraph y axis minimum\n", (float) YMIN);
   printf ("\t-L YMAX [%f]\tgraph y axis maximum\n", (float) YMAX);
-  printf ("\t-n NUMV [%d]\t\tnumber of points around circle to start with\n", NUMV);
+  printf ("\t-n NUMV [%d]\t\tnumber of points around circle to start with\n",
+	  NUMV);
   printf ("\t-s SAMPLES [%d]\tnumber of image samples\n", SAMPLES);
   printf ("\t-i NUM>20 [%d]\tnumber of iterations to run per sample\n", ITT);
   printf ("\t-r 0<=NUM<=255\t\tset static RED channel value\n");
@@ -340,15 +361,15 @@ write_to_tiff (gasket * fractal)
   char *raster;
   int invert = fractal->invert;
 
-  printf("Opening output image...\n");
+  printf ("Opening output image...\n");
   /* Open the output image */
   if ((output = TIFFOpen (fractal->file, "w")) == NULL)
     {
       fprintf (stderr, "Could not open outgoing image.\n");
       exit (EXIT_FAILURE);
     }
- 
-  printf("Success!\n");
+
+  printf ("Success!\n");
   /* malloc space for the image lines */
   raster = malloc (fractal->xres * 3 * sizeof (char));
   if (raster == NULL)
@@ -356,7 +377,7 @@ write_to_tiff (gasket * fractal)
       printf ("malloc() failed in write_to_tiff.\n");
       exit (EXIT_FAILURE);
     }
-  printf("Space allocated.\n");
+  printf ("Space allocated.\n");
   /* Write the tiff tags to the file */
 
   TIFFSetField (output, TIFFTAG_IMAGEWIDTH, (*fractal).xres);
@@ -367,7 +388,7 @@ write_to_tiff (gasket * fractal)
   TIFFSetField (output, TIFFTAG_BITSPERSAMPLE, 8);
   TIFFSetField (output, TIFFTAG_SAMPLESPERPIXEL, 3);
 
- printf("Tags written.\n");
+  printf ("Tags written.\n");
   for (row = 0; row < (*fractal).yres; row++)
     {
       for (col = 0; col < (*fractal).xres; col++)
@@ -376,12 +397,12 @@ write_to_tiff (gasket * fractal)
 	    (*fractal).pixels[row][col].r;
 	  raster[(col * 3) + 1] =
 	    invert ==
-	    1 ? ~((*fractal).pixels[row][col].g) : (*fractal).
-	    pixels[row][col].g;
+	    1 ? ~((*fractal).pixels[row][col].
+		  g) : (*fractal).pixels[row][col].g;
 	  raster[(col * 3) + 2] =
 	    invert ==
-	    1 ? ~((*fractal).pixels[row][col].b) : (*fractal).
-	    pixels[row][col].b;
+	    1 ? ~((*fractal).pixels[row][col].
+		  b) : (*fractal).pixels[row][col].b;
 	}
       if (TIFFWriteScanline (output, raster, row, (*fractal).xres * 3) != 1)
 	{
@@ -396,14 +417,15 @@ write_to_tiff (gasket * fractal)
   TIFFClose (output);
 }
 
-point next_point(point *start, point *target, double xdiv, double ydiv)
+point
+next_point (point * start, point * target, double xdiv, double ydiv)
 {
-	point result;
-	result.x = start->x + target->x;
-	result.y = start->y + target->y;
-	result.x /= xdiv;
-	result.y /= ydiv;
-	return result;
+  point result;
+  result.x = start->x + target->x;
+  result.y = start->y + target->y;
+  result.x /= xdiv;
+  result.y /= ydiv;
+  return result;
 }
 
 
@@ -413,23 +435,25 @@ render (void *fract)
   double newx, newy;
   int num, s;
   long int step;
-  point p,k;
+  point p, k;
   gasket *sier = (gasket *) fract;
   newx = 0.0;
   newy = 0.0;
 
   for (num = 0; num < sier->samples; num++)
     {
-      p = sier->points[ rand() % (sier->n) ];
+      p = sier->points[rand () % (sier->n)];
 
       for (step = 0; step < sier->iterations; step++)
-	  {
+	{
 
-		k = next_point(&p, &(sier->points[ rand() % (sier->n) ]), sier->xdiv, sier->ydiv);
-		newx = k.x;
-		newy = k.y;
+	  k =
+	    next_point (&p, &(sier->points[rand () % (sier->n)]), sier->xdiv,
+			sier->ydiv);
+	  newx = k.x;
+	  newy = k.y;
 
-	    if (step > 0)
+	  if (step > 0)
 	    {
 	      unsigned int x1, y1;
 	      pixel *pix;
@@ -447,21 +471,28 @@ render (void *fract)
 		  if (x_rot >= sier->xmin && x_rot <= sier->xmax
 		      && y_rot >= sier->ymin && y_rot <= sier->ymax)
 		    {
-		      x1 = sier->xres - (unsigned int) (((sier->xmax - x_rot) / sier->ranx) * sier->xres);
-		      y1 = sier->yres -	(unsigned int) (((sier->ymax - y_rot) / sier->rany) * sier->yres);
+		      x1 =
+			sier->xres -
+			(unsigned int) (((sier->xmax - x_rot) / sier->ranx) *
+					sier->xres);
+		      y1 =
+			sier->yres -
+			(unsigned int) (((sier->ymax - y_rot) / sier->rany) *
+					sier->yres);
 
-		      if (x1 >= 0 && x1 < sier->xres && y1 >= 0 && y1 < sier->yres)
-			  {
-			  	pthread_mutex_lock (&(sier->lock[y1]));
-			  	pix = &sier->pixels[y1][x1];
-			  	pix->value.counter += 1;
-			  	pthread_mutex_unlock (&(sier->lock[y1]));
-			  }
+		      if (x1 >= 0 && x1 < sier->xres && y1 >= 0
+			  && y1 < sier->yres)
+			{
+			  pthread_mutex_lock (&(sier->lock[y1]));
+			  pix = &sier->pixels[y1][x1];
+			  pix->value.counter += 1;
+			  pthread_mutex_unlock (&(sier->lock[y1]));
+			}
 		    }
 		}
 	    }
-        p.x = newx;
-        p.y = newy;
+	  p.x = newx;
+	  p.y = newy;
 	}
     }
   return NULL;
@@ -472,7 +503,7 @@ void
 gamma_log (gasket * fractal)
 {
 
-  float max;
+  double max;
   int row, col;
   double gamma = fractal->gamma;
   double rp, gp, bp;
@@ -485,25 +516,31 @@ gamma_log (gasket * fractal)
 	  if (fractal->pixels[row][col].value.counter != 0)
 	    {
 	      fractal->pixels[row][col].value.normal =
-		 log10 ((double) fractal->pixels[row][col].value.counter);
-	      if (fractal->pixels[row][col].value.normal > max)
-		max = fractal->pixels[row][col].value.normal;
+		log ((double) fractal->pixels[row][col].value.counter);
+	      max = max > fractal->pixels[row][col].value.normal ? max :
+		fractal->pixels[row][col].value.normal;
 	    }
-		else { fractal->pixels[row][col].value.normal = 0.0; }
+	  else
+	    {
+	      fractal->pixels[row][col].value.normal = 0.0;
+	    }
 	}
     }
 
-	if(max == 0.0) { max = 1.0; }            
+  /* avoid divide by zero */
+  if (max == 0.0)
+    {
+      max = 1.0;
+    }
 
- for (row = 0; row < fractal->yres; row++)
+  for (row = 0; row < fractal->yres; row++)
     {
       for (col = 0; col < fractal->xres; col++)
 	{
-        fractal->pixels[row][col].value.normal /= max;
-		color_pxl(fractal->pixels[row][col].value.normal,
-				  &(fractal->pal),
-				  &rp, &gp, &bp);
-	  
+	  fractal->pixels[row][col].value.normal /= max;
+	  color_pxl (fractal->pixels[row][col].value.normal,
+		     &(fractal->pal), &rp, &gp, &bp);
+
 	  fractal->pixels[row][col].r =
 	    (unsigned char) ((float) (rp)) *
 	    pow (fractal->pixels[row][col].value.normal, (1.0 / gamma));
@@ -513,7 +550,7 @@ gamma_log (gasket * fractal)
 	  fractal->pixels[row][col].b =
 	    (unsigned char) ((float) (bp)) *
 	    pow (fractal->pixels[row][col].value.normal, (1.0 / gamma));
-    } 
+	}
 
     }
 }
@@ -604,7 +641,7 @@ main (int argc, char **argv)
   /* parse arguments from the command line */
   printf ("Parsing user arguments...\n");
   parse_args (argc, argv, &sier);
-  pal_init(&(sier.pal), sier.palfile);
+  pal_init (&(sier.pal), sier.palfile);
   printf ("Done!\n");
   /* seed the randomizer */
   srandom (sier.seed);
@@ -618,18 +655,18 @@ main (int argc, char **argv)
     {
       printf
 	("Error: malloc() failed in fractal_init.  Tried to malloc %d * %ld bytes.\n",
-	 sier.n, sizeof (point*));
+	 sier.n, sizeof (point *));
       exit (EXIT_FAILURE);
     }
 
 
-    for (i = 0; i < sier.n; i++)
-	{
-	  sier.points[i].x = cos (theta); 
-	  sier.points[i].y = sin (theta); 
-	  printf("%f, %f, %f\n", (float)theta, (float)sier.points[i].x, (float)sier.points[i].y);
-	  theta += ((2 * M_PI) / (sier.n));
-	}
+  for (i = 0; i < sier.n; i++)
+    {
+      sier.points[i].x = cos (theta);
+      sier.points[i].y = sin (theta);
+      /* printf("%f, %f, %f\n", (float)theta, (float)sier.points[i].x, (float)sier.points[i].y); */
+      theta += ((2 * M_PI) / (sier.n));
+    }
 
   /* correct for threads */
   if (sier.num_threads <= 0)
@@ -659,15 +696,15 @@ main (int argc, char **argv)
     }
   /* gamma and log correct */
   printf ("Finalizing and writing out...\n");
-  
-  printf("Gamma correction...\n");
+
+  printf ("Gamma correction...\n");
   gamma_log (&sier);
-	if (sier.sup > 1)
+  if (sier.sup > 1)
     {
-      printf("Super-sampling...\n");
+      printf ("Super-sampling...\n");
       reduce (&sier);
     }
-  
+
   write_to_tiff (&sier);
   /* clean up */
   free (threads);
