@@ -58,4 +58,6 @@ Example format for color palette:
 1.5 0.0 0.5  
 0.1 0.64 0.48  
 
+![Sierpinski's Gasket Screenshot](demo2.png "Example output")
+
 
