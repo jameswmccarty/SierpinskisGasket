@@ -36,6 +36,7 @@ gasket_init (gasket * sier)
   sier->samples = SAMPLES;
   sier->gamma = GAMMA;
   sier->symmetry = 1;
+  sier->increment = 1;
   sier->invert = 0;
   sier->file = PATH;
   sier->sup = SUPER;
@@ -208,6 +209,7 @@ print_usage ()
 	  NUMV);
   printf ("\t-s SAMPLES [%d]\tnumber of image samples\n", SAMPLES);
   printf ("\t-i NUM>20 [%d]\tnumber of iterations to run per sample\n", ITT);
+  printf ("\t-c NUM [%d]\t\tamount to increment counter per hit\n", INC);
   printf ("\t-r 0<=NUM<=255\t\tset static RED channel value\n");
   printf ("\t-g 0<=NUM<=255\t\tset static GREEN channel value\n");
   printf ("\t-b 0<=NUM<=255\t\tset static BLUE channel value\n");
@@ -295,6 +297,11 @@ parse_args (int argc, char **argv, gasket * sier)
       else if (!strcmp (argv[i], "-n"))
 	{
 	  sier->n = atoi (argv[i + 1]);
+	  i += 2;
+	}
+      else if (!strcmp (argv[i], "-c"))
+	{
+	  sier->increment = atoi (argv[i + 1]);
 	  i += 2;
 	}
       else if (!strcmp (argv[i], "-xd"))
@@ -485,7 +492,7 @@ render (void *fract)
 			{
 			  pthread_mutex_lock (&(sier->lock[y1]));
 			  pix = &sier->pixels[y1][x1];
-			  pix->value.counter += 1;
+			  pix->value.counter += sier->increment;
 			  pthread_mutex_unlock (&(sier->lock[y1]));
 			}
 		    }

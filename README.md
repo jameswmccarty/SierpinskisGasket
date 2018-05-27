@@ -41,6 +41,7 @@ Then run: `./sierpinski` from the current directory with any of the available op
  o -n NUMV [3]             number of points around circle to start with  
  o -s SAMPLES [20000]      number of image samples  
  o -i NUM>20 [1000]        number of iterations to run per sample  
+ o -c NUM [1]              amount to increment counter per hit  
  o -r 0<=NUM<=255          set static RED channel value  
  o -g 0<=NUM<=255          set static GREEN channel value  
  o -b 0<=NUM<=255          set static BLUE channel value  

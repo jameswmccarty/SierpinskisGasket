@@ -10,6 +10,7 @@
 #define SAMPLES 20000
 #define ITT 1000
 #define SUPER 1
+#define INC 1
 #define GAMMA 1.0
 #define SEED 1
 #define NUMV 3
@@ -54,6 +55,7 @@ typedef struct
   int R, G, B;			/* fixed color channels */
   int sup;			/* super sample value  */
   int samples;			/* number of flame samples */
+  int increment;		/* increment hit counter by this value */
   long int iterations;		/* number of iterations per sample */
   int invert;			/* use inverse colors? 0 false, else true */
   int symmetry;			/* use symmetrical rotation axis? set to greater than 1 */
